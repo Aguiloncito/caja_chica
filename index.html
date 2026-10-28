@@ -48,6 +48,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="script.js"></script>
+
+<!-- Configuración e inicialización de Firebase y Firestore -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUtbInnqPF9LEdWgZyn-aMEVvdUfqIs_M",
+    authDomain: "caja-chica-60997.firebaseapp.com",
+    projectId: "caja-chica-60997",
+    storageBucket: "caja-chica-60997.firebasestorage.app",
+    messagingSenderId: "520355693745",
+    appId: "1:520355693745:web:8b6be5abf9ab0462b28e90",
+    measurementId: "G-XLLG63NXZJ"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  // Exponer 'db' y funciones a la ventana global si tu script.js las necesita
+  window.db = db;
+  window.collection = collection;
+  window.addDoc = addDoc;
+  window.onSnapshot = onSnapshot;
+
+  console.log("¡Firebase y Firestore conectados correctamente!");
+</script>
 </body>
 </html>
