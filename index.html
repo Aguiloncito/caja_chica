@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caja chica · Facturas PDF a Excel</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>Caja chica · Facturas PDF → Excel</h1>
+  <p>Sube las facturas electrónicas (FEL) en PDF, revisa los datos y descarga un Excel con una hoja por carpeta.</p>
+</header>
+<main>
+  <div class="card">
+    <div id="drop" tabindex="0">
+      <b>Arrastra tus carpetas, PDF o ZIP aquí</b>
+      <span>o haz clic para seleccionarlas (carpetas, PDF sueltos o .zip). Cada carpeta (ej. «enero») se convierte en una hoja. Todo se procesa en tu navegador.</span>
+      <input id="file" type="file" accept="application/pdf,.pdf,.zip,application/zip" multiple hidden>
+    </div>
+    <div style="margin-top:10px"><button id="pickDir">📁 Elegir una carpeta</button> <input id="dir" type="file" webkitdirectory multiple hidden></div>
+    <ul id="log"></ul>
+  </div>
+
+  <div class="card">
+    <div class="bar">
+      <button id="add">+ Fila manual (gasto sin factura)</button>
+      <button id="clear">Vaciar todo</button>
+      <span class="sp"></span>
+      <label class="n">N.º de caja chica <input id="num" type="number" min="1" value="1"></label>
+      <button id="exp1" class="pri" disabled>⬇ Excel de esta carpeta</button>
+      <button id="expZip" class="pri" disabled>⬇ Un Excel por cada carpeta (ZIP)</button>
+      <button id="expAll" disabled>⬇ Todo en un solo Excel</button>
+    </div>
+    <div style="height:12px"></div>
+    <div id="tabs" class="tabs"></div>
+    <div class="wrap"><table>
+      <thead><tr><th>Nombre</th><th>NIT</th><th>Descripción</th><th>N.º factura</th><th>N.º serie</th><th>Fecha</th><th>Motivo</th><th>Monto total (Q)</th><th>Archivo de origen</th><th></th></tr></thead>
+      <tbody id="body"></tbody>
+      <tfoot><tr><td colspan="7" style="text-align:right">TOTAL DE LA CARPETA</td><td id="tot">Q0.00</td><td colspan="2"></td></tr></tfoot>
+    </table></div>
+    <div id="empty" class="empty">Aún no hay facturas cargadas.</div>
+    <p class="hint">Todas las celdas son editables. Rellena el <b>Motivo</b> a mano (no viene en el PDF). Las hojas se arman según la carpeta de donde viene cada PDF. Celdas en amarillo = dato no encontrado.</p>
+  </div>
+</main>
+<dialog id="dlg"><div class="bar"><b id="dlgT">Texto leído del PDF</b><span class="sp"></span><button id="dcopy">Copiar</button><button id="dclose">Cerrar</button></div><pre id="dpre"></pre></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
