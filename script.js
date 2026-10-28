@@ -191,8 +191,12 @@ function totals(){
 
 $('body').addEventListener('change',e=>{
   const t=e.target,r=rows.find(x=>x.id==t.dataset.id);if(!r)return;
-  r[t.dataset.k]=t.dataset.k==='monto'?(parseFloat(t.value)||0):t.value.trim();
-  render();
+  const k=t.dataset.k;
+  r[k]=k==='monto'?(parseFloat(t.value)||0):t.value.trim();
+  t.value=r[k];                                  // refleja el valor ya limpio
+  t.classList.toggle('miss',r[k]===''||r[k]===0); // quita/pone el amarillo de "dato faltante"
+  if(k==='factura')t.closest('tr').classList.toggle('nofac',sinFac(r));
+  totals();                                      // sin render(): así no se pierde el foco al pulsar Tab
 });
 $('body').addEventListener('click',e=>{
   const id=e.target.dataset.del;if(id){rows=rows.filter(r=>r.id!=id);render();}
@@ -217,9 +221,15 @@ $('dir').onchange=e=>{handleFiles(toItems(e.target.files));e.target.value='';};
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',async e=>handleFiles(await dropItems(e.dataTransfer)));
+['dragover','drop'].forEach(ev=>window.addEventListener(ev,e=>e.preventDefault()));
 
 $('dclose').onclick=()=>$('dlg').close();
-$('dcopy').onclick=()=>navigator.clipboard.writeText($('dpre').textContent);
+$('dcopy').onclick=async()=>{
+  const b=$('dcopy');
+  try{await navigator.clipboard.writeText($('dpre').textContent);b.textContent='¡Copiado!';}
+  catch{const r=document.createRange();r.selectNodeContents($('dpre'));const g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Seleccionado: Ctrl+C';}
+  setTimeout(()=>b.textContent='Copiar',1800);
+};
 /*Exportar a Excel*/
 const H=['Nombre','Nit','Descripción','Número de factura','Número de serie','Fecha','Motivo','Monto total (Q)'];
 const safe=t=>t.replace(/[\\\/:*?"<>|]/g,'_').trim()||'sin_nombre';
