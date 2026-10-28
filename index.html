@@ -48,6 +48,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="script.js"></script>
 
 <!-- Configuración e inicialización de Firebase y Firestore -->
 <script type="module">
@@ -67,7 +68,7 @@
 
   // Inicializar Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  try { getAnalytics(app); } catch (e) { console.warn('Analytics no disponible en este entorno:', e.message); } // no es necesario para la app
   const db = getFirestore(app);
 
   // Exponer 'db' y funciones a la ventana global si tu script.js las necesita
